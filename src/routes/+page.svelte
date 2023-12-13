@@ -4,36 +4,43 @@
   // Props
 
   // Constant Variables
-  const centerX = window.innerWidth / 2
-  const centerY = window.innerHeight / 2
 
   // State Variables
-  let m = { x: 0, y: 0 };
+  const mouseCoords = { x: 0, y: 0 };
   let card: HTMLElement;
+
+  let innerWidth: number;
+  let innerHeight: number;
+  let centerX: number;
+  let centerY: number;
 
   // Event Handlers
   const handleMove = (event: PointerEvent) => {
-    m.x = event.clientX
-    m.y = event.clientY
+    mouseCoords.x = event.clientX
+    mouseCoords.y = event.clientY
 
 
     // Get offset of pointer from center
-    const offsetX = ((m.x - centerX) / centerX) * 30
-    const offsetY = ((m.y - centerY) / centerY) * 30
+    const offsetX = ((mouseCoords.x - centerX) / centerX) * 30
+    const offsetY = ((mouseCoords.y - centerY) / centerY) * 30
 
     gsap.to(card, {rotateX: -1 * offsetY, rotateY: offsetX})
   }
   // Lifecycle Functions
 
   // Reactive Statements
+  $: {
+    centerX = innerWidth / 2
+    centerY = innerHeight / 2
+  }
 
 </script>
 
-
+<svelte:window bind:innerHeight={innerHeight} bind:innerWidth={innerWidth} />
 
 <main on:pointermove={handleMove} class="h-full w-full grid place-items-center">
   <article bind:this={card} class="h-96 w-80 bg-gradient-to-tr from-cyan-500 to-fuchsia-500 rounded-2xl shadow-lg relative">
-    <div id="shadow" class="bg-gray-900 absolute inset-3 rounded-2xl blur-xl"></div>
+    <div id="shadow" class="bg-gray-900 absolute inset-3 rounded-md blur-xl"></div>
     <div class="bg-gray-900 absolute inset-4 rounded-2xl"></div>
   </article>
 </main>
